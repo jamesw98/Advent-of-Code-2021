@@ -11,10 +11,6 @@ class Day1_p1 {
 
         if (current > Int32.Parse(lines[i - 1])) {
           total++;
-          Console.WriteLine("Increase")
-        }
-        else{
-          Console.WriteLine("Decrease")
         }
       }
       Console.WriteLine(total);
