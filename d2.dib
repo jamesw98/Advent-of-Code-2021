@@ -1,0 +1,48 @@
+#!csharp
+
+using System;
+
+class Day2 {
+
+    public int Part1(string[] lines) {
+        int horiz = 0;
+        int depth = 0;
+        
+        foreach (string line in lines) {
+            string dir = line.Split(" ")[0];
+            int value = int.Parse(line.Split(" ")[1]);
+
+            if (dir.Equals("forward")) horiz += value;
+            else if (dir.Equals("down")) depth += value;
+            else depth -= value;
+        }
+        return horiz * depth;
+    }
+
+    public int Part2(string[] lines) {
+        int horiz = 0;
+        int depth = 0;
+        int aim = 0;
+
+        foreach (string line in lines) {
+            string dir = line.Split(" ")[0];
+            int value = int.Parse(line.Split(" ")[1]);
+
+            if (dir.Equals("forward")) {
+                horiz += value;
+                depth += value * aim;
+            }
+            else if (dir.Equals("down")) aim += value;
+            else aim -= value;
+        }
+
+        return horiz * depth;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("d2_input.txt");
+var D2 = new Day2();
+Console.WriteLine(D2.Part1(lines));
+Console.WriteLine(D2.Part2(lines));
