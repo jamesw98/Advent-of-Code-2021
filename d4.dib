@@ -24,6 +24,7 @@ class Day4 {
         // create all boards
         ArrayList tempLines = new ArrayList();
         for (int i = 2; i < this.lines.Length; i++) {
+            // after a board has been read, create the board and add it to the list of boards
             if (lines[i] == "") {
                 this.boards.Add(createBoard(tempLines));
                 tempLines.Clear();
@@ -32,40 +33,38 @@ class Day4 {
                 tempLines.Add(lines[i]);
             }
         }
+        // add the final board, since the file doesn't end with an empty line
         this.boards.Add(createBoard(tempLines));
     }
 
-    // part 1
+    // get the first bingo
     public int Part1() {
-        int lastnum = 0;
-
         // call out each number
         foreach (int num in this.nums) {
             // check if a board has the number being called and mark it
             checkBoardsForNum(num);
-            lastnum = num;
             
             // check all the boards for a bingo
-            foreach (int [,] board in this.boards) {
+            foreach (int[,] board in this.boards) {
                 // if theres a bingo, get the sum of all the unmarked numbers
                 if (checkForBingo(board)) {
-                    
-                    return getBoardSum(board) * lastnum;
+                    // get the answer
+                    return getBoardSum(board) * num;
                 }
             }
         }
         return -1;
     }
 
+    // get the last bingo
     public int Part2() {
-        int lastnum = -1;
+        // used for keeping track of bingos, getting the last bingo is O(1)
         Stack bingos = new Stack();
 
         // call out each number
         foreach (int num in this.nums) {
             // check if a board has the number being called and mark it
             checkBoardsForNum(num);
-            lastnum = num;
             
             // check all the boards for a bingo
             for (int i = 0; i < this.boards.Count; i++) {
@@ -73,11 +72,14 @@ class Day4 {
 
                 // if theres a bingo, get the sum of all the unmarked numbers
                 if (checkForBingo(board)) {
-                    bingos.Push(getBoardSum(board) * lastnum);
+                    // add the value to the bingo stack
+                    bingos.Push(getBoardSum(board) * num);
+                    // remove the current board from the list of bingo boards to loop through
                     this.boards.Remove(this.boards[i]);
                 }
             }
         }
+        // get the last board that bingod 
         return (int) bingos.Pop();
     }
 
@@ -96,10 +98,13 @@ class Day4 {
 
     // checks if a board has a bingo
     private Boolean checkForBingo(int[,] board) {
+        // loop through each row and column
         for (int i = 0; i < 5; i++) {
+            // check column
             if (board[i, 0] == -1 && board[i, 1] == -1 && board[i, 2] == -1 && board[i, 3] == -1 && board[i, 4] == -1) {
                 return true;                
             }
+            // check row
             else if (board[0, i] == -1 && board[1, i] == -1 && board[2, i] == -1 && board[2, i] == -1 && board[3, i] == -1 && board[4, i] == -1) {
                 return true;
             }
@@ -113,6 +118,7 @@ class Day4 {
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 5; j++) {
                     if (board[i, j] == num) {
+                        // -1 indicates that it has been marked
                         board[i, j] = -1;
                     }
                 }
@@ -145,5 +151,5 @@ class Day4 {
 
 string[] lines = System.IO.File.ReadAllLines("d4_input.txt");
 var D4 = new Day4(lines);
-Console.WriteLine(D4.Part1());
-Console.WriteLine(D4.Part2());
+Console.WriteLine(D4.Part1()); // 23177
+Console.WriteLine(D4.Part2()); // 6804
