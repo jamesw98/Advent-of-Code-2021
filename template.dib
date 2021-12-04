@@ -1,0 +1,25 @@
+#!csharp
+
+class DayN {
+
+    private string[] lines;
+
+    public DayN(string[] lines) {
+        this.lines = lines;
+    }
+
+    public int Part1() {
+        return -1;
+    }
+
+    public int Part2() {
+        return -1;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("dN_input.txt");
+var DN = new DayN(lines);
+Console.WriteLine(DN.Part1()); 
+Console.WriteLine(DN.Part2()); 
