@@ -1,0 +1,160 @@
+#!csharp
+
+using System;
+using System.Text.RegularExpressions;
+using System.Collections;
+
+class Day4 {
+
+    // read in first line
+    // read in all boards
+    // loop through entries in first line
+    // mark boards (2d array? dictionary?)
+    // check for bingo
+    // if bingo, return 
+
+    private string[] lines;
+    private int[] nums;
+    private ArrayList boards;
+
+    public Day4(string[] lines) {
+        this.lines = lines;
+        this.nums = new int[100];
+        this.boards = new ArrayList();
+        
+        string[] split = this.lines[0].Split(",");
+        for (int i = 0; i < 100; i++) {
+            this.nums[i] = int.Parse(split[i]);
+        }
+        
+        ArrayList tempLines = new ArrayList();
+        for (int i = 2; i < this.lines.Length; i++) {
+            if (lines[i] == "") {
+                this.boards.Add(createBoard(tempLines));
+                tempLines.Clear();
+            }
+            else {
+                tempLines.Add(lines[i]);
+            }
+        }
+        
+        this.boards.Add(createBoard(tempLines));
+    }
+
+    public int Part1() {
+        int lastnum = 0;
+        foreach (int num in this.nums) {
+            checkBoardsForNum(num);
+            lastnum = num;
+            
+            foreach (int [,] board in this.boards) {
+                if (checkForBingo(board)) {
+                    Console.WriteLine($"bingo {lastnum}");
+                    return getBoardSum(board) * lastnum;
+                }
+            }
+        }
+
+        
+        return -1;
+    }
+
+    public int Part2() {
+        return -1;
+    }
+
+    private int getBoardSum(int[,] board) {
+        int sum = 0;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (board[i, j] != -1) {
+                    sum += board[i, j];
+                }
+            }
+        }
+        return sum;
+    }
+
+    private Boolean checkForBingo(int[,] board) {
+        for (int i = 0; i < 5; i++) {
+            if (board[i, 0] == -1 && board[i, 1] == -1 && board[i, 2] == -1 && board[i, 3] == -1 && board[i, 4] == -1) {
+                return true;                
+            }
+            else if (board[0, i] == -1 && board[1, i] == -1 && board[2, i] == -1 && board[2, i] == -1 && board[3, i] == -1 && board[4, i] == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void checkBoardsForNum(int num) {
+        foreach (int[,] board in this.boards) {
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    if (board[i, j] == num) {
+                        board[i, j] = -1;
+                    }
+                }
+            }
+        }
+    }
+
+    private int[,] createBoard(ArrayList lines) {
+        int[,] tempBoard = new int[5, 5];
+
+        int y = 0;
+        foreach (string l in lines) {
+            int x = 0;
+
+            foreach (string i in Regex.Replace(l, @"\s+", " ").Split(" ")) {
+                if (i == "") {
+                    continue;
+                }
+                tempBoard[y, x] = int.Parse(i);
+                x++;
+            }
+            y++;
+        }
+        return tempBoard;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("d4_input.txt");
+var D4 = new Day4(lines);
+Console.WriteLine(D4.Part1());
+Console.WriteLine(D4.Part2());
+
+#!csharp
+
+string[] small = System.IO.File.ReadAllLines("small.txt");
+
+int[,] board = new int[5, 5];
+
+int y = 0;
+foreach (string l in small) {
+    if (l == "") {
+        continue;
+    }
+    
+    int x = 0;
+    foreach (string i in Regex.Replace(l, @"\s+", " ").Split(" ")){
+        if (i == "") {
+            continue;
+        }
+        board[y,x] = int.Parse(i);
+        x++;
+    }
+    y++;
+}
+
+for (int i = 0; i < 5; i++) {
+    for (int j = 0; j < 5; j++) {
+        if (board[i, j] == 92) {
+            board[i, j] = -1;
+        }
+        Console.Write(board[i,j] + " ");
+    }
+    Console.WriteLine();
+}
