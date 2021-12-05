@@ -1,0 +1,84 @@
+#!csharp
+
+using System;
+using System.Collections;
+using System.Text.RegularExpressions;
+
+class Day5 {
+
+    private string[] lines;
+
+    public Day5(string[] lines) {
+        this.lines = lines;
+    }
+
+    public int Part1() {
+        Dictionary<(int, int), int> pointsTouched = new Dictionary<(int, int), int>();
+
+        foreach (string line in this.lines) {
+            Regex rx = new Regex(@"(\d+),(\d+) -> (\d+),(\d+)");
+
+            var match = rx.Match(line);
+
+            int x1 = int.Parse(match.Groups[1].Value);
+            int y1 = int.Parse(match.Groups[2].Value);
+            int x2 = int.Parse(match.Groups[3].Value);
+            int y2 = int.Parse(match.Groups[4].Value);
+
+            if (y1 == y2) {
+                for (int i = Math.Min(x1, x2); i <= Math.Max(x1, x2); i++) {
+                    (int, int) point = (i, y1);
+                    
+                    if (pointsTouched.ContainsKey(point)) {
+                        pointsTouched[point] = pointsTouched[point] + 1;
+                    }
+                    else {
+                        pointsTouched.Add((i, y1), 1);
+                    }
+                }
+            }
+            else if (x1 == x2) {
+                for (int i = Math.Min(y1, y2); i <= Math.Max(y1, y2); i++) {
+                    (int, int) point = (x1, i);
+                    
+                    if (pointsTouched.ContainsKey(point)) {
+                        pointsTouched[point] = pointsTouched[point] + 1;
+                    }
+                    else {
+                        pointsTouched.Add((x1, i), 1);
+                    }
+                    
+                }
+            }
+        }
+
+        int count = 0;
+
+        foreach (KeyValuePair<(int, int), int> entry in pointsTouched) {
+            if (entry.Value > 1) count++;
+        }
+
+        return count;
+    }
+
+    public int Part2() {
+        return -1;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("d5_input.txt");
+var D5 = new Day5(lines);
+Console.WriteLine(D5.Part1()); 
+Console.WriteLine(D5.Part2()); 
+
+#!csharp
+
+// point 1 (487, 536)
+int x1 = 487;
+int y1 = 536;
+
+// point 2 (697, 536)
+int x2 = 697;
+int y2 = 536;
