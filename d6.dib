@@ -42,7 +42,7 @@ class Day6 {
             fish[f]++;
         }
 
-        while (days-- > 0) {
+        while (days-- > 0) {    
             long[] tempFish = new long[9];
 
             for (long i = 0; i < fish.Length; i++) {
@@ -67,3 +67,4 @@ string[] lines = System.IO.File.ReadAllLines("d6_input.txt");
 var D6 = new Day6(lines);
 Console.WriteLine(D6.Part1(80));  // 360610
 Console.WriteLine(D6.Part2(256)); // 1631629590423
+Console.WriteLine("So long, and thanks for all the fish")
