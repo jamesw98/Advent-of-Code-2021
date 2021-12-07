@@ -1,0 +1,58 @@
+#!csharp
+
+using static System.Console;
+using System.Collections;
+
+class Day7 {
+
+    private string[] lines;
+
+    public Day7(string[] lines) {
+        this.lines = lines;
+    }
+
+    public int Part1() {
+        return getMin(false);
+    }
+
+    public int Part2() {
+        return getMin(true);
+    }
+
+    private int getMin(bool part2) {
+        List<int> crabs = new List<int>(Array.ConvertAll(lines[0].Split(","), l => int.Parse(l)));
+        List<int> positions = new List<int>();
+
+        int minimum = int.MaxValue;
+
+        for (int i = 1; i < crabs.Max(); i++) {
+            if (positions.Contains(i)) {
+                continue;
+            }
+            
+            positions.Add(i);
+
+            int tempMin = 0;    
+            foreach (int c in crabs) {
+                int n = Math.Abs(i - c);
+
+                if (part2) tempMin += (n* (n + 1) / 2);
+                else tempMin += n;
+            }
+
+            if (tempMin < minimum) {
+                minimum = tempMin;
+            }
+        }
+
+        return minimum;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("d7_input.txt");
+var D7 = new Day7(lines);
+Console.WriteLine(D7.Part1()); // 333755
+Console.WriteLine(D7.Part2()); // 94017638
+Console.WriteLine("Time for crab");
