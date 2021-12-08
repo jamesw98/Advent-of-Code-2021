@@ -1,0 +1,34 @@
+#!csharp
+
+using static System.Console;
+
+class Day8 {
+
+    private string[] lines;
+
+    public Day8(string[] lines) {
+        this.lines = lines;
+    }
+
+    public int Part1() {
+        int count = 0;
+        foreach (string line in this.lines) {
+            foreach (string i in line.Split("|")[1].Split(" ")) {
+                if (i == "") continue;
+                if (i.Length == 2 || i.Length == 3 || i.Length == 4 || i.Length == 7) count ++;
+            }   
+        }
+        return count;
+    }
+
+    public int Part2() {
+        return -1;
+    }
+}
+
+#!csharp
+
+string[] lines = System.IO.File.ReadAllLines("d8_input.txt");
+var D8 = new Day8(lines);
+Console.WriteLine(D8.Part1()); 
+Console.WriteLine(D8.Part2()); 
